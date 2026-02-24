@@ -171,11 +171,9 @@
       margin-top:10px;
     }
 
-    .card{
-      /* AVANT: span 6 (2 colonnes) */
-      /* MAINTENANT: span 12 (1 seule carte par ligne) => largeur doublée */
-      grid-column: span 12;
 
+    .card{
+      grid-column: span 6; /* 2 par ligne */
       background: var(--card);
       border: 1px solid var(--stroke);
       border-radius: var(--radius);
@@ -183,7 +181,7 @@
       overflow:hidden;
       position:relative;
     }
-
+    @media (max-width: 860px){ .card{grid-column: span 12;} } /* 1 par ligne sur téléphone */
     .card:before{
       content:"";
       position:absolute; inset:-2px;
