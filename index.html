@@ -73,6 +73,7 @@
     .brand{
       display:flex; align-items:center; gap:12px; letter-spacing:.12em;
       text-transform:uppercase; font-weight:800;
+      flex-wrap:wrap;
     }
     .brand .logo{
       width:12px; height:12px; border-radius:50%;
@@ -169,8 +170,12 @@
       gap:16px;
       margin-top:10px;
     }
+
     .card{
-      grid-column: span 6;
+      /* AVANT: span 6 (2 colonnes) */
+      /* MAINTENANT: span 12 (1 seule carte par ligne) => largeur doublée */
+      grid-column: span 12;
+
       background: var(--card);
       border: 1px solid var(--stroke);
       border-radius: var(--radius);
@@ -178,39 +183,76 @@
       overflow:hidden;
       position:relative;
     }
-    @media (max-width: 860px){ .card{grid-column: span 12;} }
+
     .card:before{
       content:"";
       position:absolute; inset:-2px;
-      background: radial-gradient(500px 220px at 15% 20%, rgba(177,76,255,.18), transparent 55%);
+      background: radial-gradient(700px 260px at 15% 20%, rgba(177,76,255,.18), transparent 55%);
       opacity:.9;
       pointer-events:none;
     }
+
     .cardInner{
       position:relative;
       padding:18px;
+
+      /* AVANT: 88px 1fr */
+      /* MAINTENANT: image plus large, reste la même "hauteur" globale */
       display:grid;
-      grid-template-columns: 88px 1fr;
-      gap:14px;
+      grid-template-columns: 176px 1fr; /* largeur doublée */
+      gap:16px;
       align-items:center;
     }
+
+    /* Responsive: sur petits écrans, image au-dessus du texte */
+    @media (max-width: 720px){
+      .cardInner{grid-template-columns: 1fr}
+    }
+
+    /* Thumbnail image (plus un emoji) */
     .thumb{
-      width:88px; height:88px; border-radius:18px;
+      width:176px; height:176px;   /* largeur doublée, hauteur similaire (carré) */
+      border-radius:18px;
       border:1px solid rgba(255,255,255,.12);
       background:
-        radial-gradient(circle at 30% 30%, rgba(177,76,255,.35), transparent 55%),
+        radial-gradient(circle at 30% 30%, rgba(177,76,255,.25), transparent 55%),
         linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.45));
       box-shadow: 0 0 0 1px rgba(177,76,255,.20), 0 18px 60px rgba(0,0,0,.45);
-      display:grid; place-items:center;
-      font-weight:900; letter-spacing:.08em;
-      color: rgba(255,255,255,.9);
+      overflow:hidden;
+      position:relative;
     }
-    .meta h3{margin:0; font-size:18px; letter-spacing:.03em}
-    .meta p{margin:6px 0 0; color:var(--muted); font-size:13.5px; line-height:1.35}
+
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(1.05) contrast(1.05);
+    }
+
+    .thumb .tagPill{
+      position:absolute;
+      left:10px;
+      bottom:10px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      background: rgba(0,0,0,.45);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: 0 0 18px rgba(177,76,255,.20);
+      backdrop-filter: blur(6px);
+    }
+
+    .meta h3{margin:0; font-size:20px; letter-spacing:.03em}
+    .meta p{margin:8px 0 0; color:var(--muted); font-size:14px; line-height:1.45}
     .meta .price{margin-top:10px; font-weight:900; letter-spacing:.04em}
     .row{
       display:flex; gap:10px; align-items:center; justify-content:space-between;
       margin-top:12px;
+      flex-wrap:wrap;
     }
     .mini{
       padding:10px 12px;
@@ -278,13 +320,21 @@
       background: rgba(255,255,255,.03);
       margin-bottom:10px;
     }
+
+    /* mini image dans le panier */
     .cartThumb{
       width:54px; height:54px; border-radius:14px;
       border:1px solid rgba(255,255,255,.10);
-      background: radial-gradient(circle at 30% 30%, rgba(177,76,255,.28), transparent 55%);
-      display:grid; place-items:center;
-      font-weight:900; font-size:12px; letter-spacing:.06em;
+      overflow:hidden;
+      background: radial-gradient(circle at 30% 30%, rgba(177,76,255,.18), transparent 55%);
     }
+    .cartThumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
     .cartItem h4{margin:0; font-size:14px}
     .cartItem .line{margin-top:6px; color:var(--muted); font-size:12px}
     .qtyRow{margin-top:10px; display:flex; gap:8px; align-items:center; justify-content:space-between}
@@ -550,21 +600,63 @@
     // Mets l'URL de ton gamepass ici (ex: https://www.roblox.com/game-pass/123456789/Mon-Gamepass)
     const ROBLOX_GAMEPASS_URL = "https://www.roblox.com/";
 
-    // Tes produits : modifie titres, prix, description, tag/emoji
+    // Affichage des prix (tu peux changer)
+    const CURRENCY_SYMBOL = "€";
+    const ROBUX_SYMBOL = "R$";
+
+    // Tes produits : ajoute une image avec "img"
+    // Astuce: mets des fichiers dans un dossier "images/" à côté du html:
+    // images/gold.png, images/silver.png, ...
     const PRODUCTS = [
-      { id:"p1", title:"Article Neon",    desc:"Description courte premium, livraison rapide.", price:4.99, tag:"NEON", emoji:"🟣" },
-      { id:"p2", title:"Pack Violet",     desc:"Pack d’articles en thème violet sombre.",      price:9.99, tag:"PACK", emoji:"✨" },
-      { id:"p3", title:"Offre Limited",   desc:"Stock limité, réservé aux rapides.",          price:14.99, tag:"LTD",  emoji:"⚡" },
-      { id:"p4", title:"Bundle Deluxe",   desc:"Le bundle le plus complet et stylé.",         price:24.99, tag:"VIP",  emoji:"👑" },
+      {
+        id:"p1",
+        title:"Gold Admin Abuse",
+        desc:"Main system",
+        priceEUR: 2.00,
+        priceRobux: 250,
+        tag:"NEON",
+        img:"images/gold.png"
+      },
+      {
+        id:"p2",
+        title:"Silver Admin Abuse",
+        desc:"Pack d’articles en thème violet sombre.",
+        priceEUR: 9.99,
+        priceRobux: 999,
+        tag:"PACK",
+        img:"images/silver.png"
+      },
+      {
+        id:"p3",
+        title:"Bronze Admin Abuse",
+        desc:"Stock limité, réservé aux rapides.",
+        priceEUR: 14.99,
+        priceRobux: 1499,
+        tag:"LTD",
+        img:"images/bronze.png"
+      },
+      {
+        id:"p4",
+        title:"Bundle Deluxe",
+        desc:"Le bundle le plus complet et stylé.",
+        priceEUR: 24.99,
+        priceRobux: 2499,
+        tag:"VIP",
+        img:"images/bundle.png"
+      },
     ];
 
     // =========================
     // 2) PANIER (LOCALSTORAGE)
     // =========================
-    const LS_KEY = "rokyshop_cart_v1";
+    const LS_KEY = "rokyshop_cart_v2";
 
     function eur(n){
       return new Intl.NumberFormat("fr-FR", { style:"currency", currency:"EUR" }).format(n);
+    }
+
+    function robux(n){
+      return `${n} ${ROBUX_SYMBOL}`;
     }
 
     function loadCart(){
@@ -585,11 +677,11 @@
       return Object.values(cart).reduce((a,b)=>a + (b||0), 0);
     }
 
-    function cartTotal(cart){
+    function cartTotalEUR(cart){
       let t = 0;
       for (const [id, qty] of Object.entries(cart)){
         const p = PRODUCTS.find(x=>x.id===id);
-        if (p) t += p.price * qty;
+        if (p) t += (p.priceEUR || 0) * qty;
       }
       return Math.round(t * 100) / 100;
     }
@@ -604,17 +696,32 @@
 
     let cart = loadCart();
 
+    function safeText(s){
+      return String(s ?? "");
+    }
+
     function renderProducts(){
       grid.innerHTML = PRODUCTS.map(p => `
         <article class="card">
           <div class="cardInner">
-            <div class="thumb" aria-hidden="true">${p.emoji}<div style="font-size:11px; opacity:.8; margin-top:6px;">${p.tag}</div></div>
+            <div class="thumb" aria-hidden="true">
+              <img src="${safeText(p.img)}" alt="${safeText(p.title)}">
+              <div class="tagPill">${safeText(p.tag)}</div>
+            </div>
+
             <div class="meta">
-              <h3>${p.title}</h3>
-              <p>${p.desc}</p>
+              <h3>${safeText(p.title)}</h3>
+              <p>${safeText(p.desc)}</p>
+
               <div class="row">
-                <div class="price">${eur(p.price)}</div>
-                <button class="mini add" data-add="${p.id}">Ajouter</button>
+                <div class="price">
+                  <div style="font-size:18px; font-weight:900;">${eur(p.priceEUR || 0)}</div>
+                  <div style="margin-top:4px; color:rgba(255,255,255,.65); font-size:12.5px; font-weight:800;">
+                    ou ${robux(p.priceRobux || 0)}
+                  </div>
+                </div>
+
+                <button class="mini add" data-add="${safeText(p.id)}">Ajouter</button>
               </div>
             </div>
           </div>
@@ -635,7 +742,7 @@
     // =========================
     function renderCart(){
       cartCountEl.textContent = String(cartCount(cart));
-      cartTotalEl.textContent = eur(cartTotal(cart));
+      cartTotalEl.textContent = eur(cartTotalEUR(cart));
 
       const entries = Object.entries(cart).filter(([_,q])=>q>0);
       if (entries.length === 0){
@@ -653,17 +760,19 @@
         if (!p) return "";
         return `
           <div class="cartItem">
-            <div class="cartThumb">${p.emoji}</div>
+            <div class="cartThumb">
+              <img src="${safeText(p.img)}" alt="${safeText(p.title)}">
+            </div>
             <div>
-              <h4>${p.title}</h4>
-              <div class="line">${eur(p.price)} • ${p.tag}</div>
+              <h4>${safeText(p.title)}</h4>
+              <div class="line">${eur(p.priceEUR || 0)} • ${robux(p.priceRobux || 0)} • ${safeText(p.tag)}</div>
               <div class="qtyRow">
                 <div class="qty">
-                  <button data-dec="${p.id}" aria-label="Diminuer">−</button>
+                  <button data-dec="${safeText(p.id)}" aria-label="Diminuer">−</button>
                   <strong>${qty}</strong>
-                  <button data-inc="${p.id}" aria-label="Augmenter">+</button>
+                  <button data-inc="${safeText(p.id)}" aria-label="Augmenter">+</button>
                 </div>
-                <button class="remove" data-rm="${p.id}">Supprimer</button>
+                <button class="remove" data-rm="${safeText(p.id)}">Supprimer</button>
               </div>
             </div>
           </div>
@@ -724,9 +833,8 @@
     const orderSummary = document.getElementById("orderSummary");
 
     function openModal(){
-      // construit le résumé
       const entries = Object.entries(cart).filter(([_,q])=>q>0);
-      const total = cartTotal(cart);
+      const totalEUR = cartTotalEUR(cart);
 
       if (entries.length === 0){
         orderSummary.innerHTML = `<b>Ton panier est vide.</b> Ajoute un produit avant de payer.`;
@@ -736,17 +844,14 @@
         const lines = entries.map(([id, qty])=>{
           const p = PRODUCTS.find(x=>x.id===id);
           if (!p) return "";
-          return `• ${qty}× ${p.title} (${eur(p.price)})`;
+          return `• ${qty}× ${safeText(p.title)} (${eur(p.priceEUR || 0)} / ${robux(p.priceRobux || 0)})`;
         }).join("<br/>");
 
         orderSummary.innerHTML =
-          `<b>Commande :</b><br/>${lines}<br/><br/><b>Total :</b> ${eur(total)}<br/>`;
+          `<b>Commande :</b><br/>${lines}<br/><br/><b>Total :</b> ${eur(totalEUR)}<br/>` +
+          `<span style="color:rgba(255,255,255,.65)">(Si paiement via Gamepass, le client achète le(s) pass correspondant(s) au total.)</span>`;
 
-        // PayPal.me (le client mettra le montant)
-        // Note: PayPal.me peut supporter /montant selon pays/compte, sinon laisse simple.
         paypalLink.href = PAYPAL_ME_URL;
-
-        // Gamepass (tu peux remplacer par une page avec plusieurs gamepasses)
         gamepassLink.href = ROBLOX_GAMEPASS_URL;
       }
 
