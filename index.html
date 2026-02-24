@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mon site</title>
+  <style>
+    html, body { height: 100%; margin: 0; font-family: Arial, sans-serif; color: white; }
+    .bg {
+      position: fixed; inset: 0;
+      background: black;
+      overflow: hidden;
+      z-index: -1;
+    }
+    .bg video, .bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.75;
+      filter: blur(0px);
+    }
+    .overlay {
+      position: fixed; inset: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.08), transparent 40%),
+                  linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+      z-index: -1;
+    }
+    .container {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 40px 16px;
+      text-align: center;
+    }
+    .card {
+      max-width: 780px;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 28px;
+      backdrop-filter: blur(6px);
+    }
+    a { color: #9ad0ff; }
+    .btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.18);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fond : tu peux mettre un MP4 (recommandé) ou un GIF -->
+  <div class="bg">
+    <!-- OPTION 1 (recommandé): vidéo MP4 -->
+    <!--
+    <video autoplay muted loop playsinline>
+      <source src="background.mp4" type="video/mp4" />
+    </video>
+    -->
+
+    <!-- OPTION 2: GIF -->
+    <img src="background.gif" alt="fond animé" />
+  </div>
+  <div class="overlay"></div>
+
+  <div class="container">
+    <div class="card">
+      <h1>Salut 👋</h1>
+      <p>Mon site gratuit, sans pub, hébergé sur GitHub Pages.</p>
+      <p>Je peux mettre ce que je veux ici.</p>
+      <a class="btn" href="https://github.com/">Mon GitHub</a>
+    </div>
+  </div>
+
+</body>
+</html>
