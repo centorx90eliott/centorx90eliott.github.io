@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Product — Roky Shop</title>
+  <meta name="description" content="Roky Shop product page." />
+
+  <style>
+    :root{
+      --bg0:#050508;
+      --bg1:#0a0a10;
+      --card: rgba(10,10,16,.62);
+      --stroke: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.65);
+      --violet: #b14cff;
+      --violet2:#7a2cff;
+      --glow: 0 0 18px rgba(177,76,255,.35), 0 0 52px rgba(122,44,255,.18);
+      --shadow: 0 14px 60px rgba(0,0,0,.55);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:
+        radial-gradient(900px 500px at 20% 15%, rgba(177,76,255,.18), transparent 55%),
+        radial-gradient(900px 500px at 75% 40%, rgba(122,44,255,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+    .bg{position:fixed; inset:0; z-index:-2;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.06), transparent 45%),
+        radial-gradient(circle at 70% 55%, rgba(177,76,255,.06), transparent 50%);
+    }
+    .stars{position:fixed; inset:-10%; z-index:-1; opacity:.35;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.7) 40%, transparent 41%),
+        radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,.55) 40%, transparent 41%),
+        radial-gradient(1px 1px at 55% 40%, rgba(255,255,255,.6) 40%, transparent 41%),
+        radial-gradient(1px 1px at 80% 25%, rgba(255,255,255,.5) 40%, transparent 41%),
+        radial-gradient(1px 1px at 85% 70%, rgba(255,255,255,.45) 40%, transparent 41%),
+        radial-gradient(1px 1px at 15% 65%, rgba(255,255,255,.5) 40%, transparent 41%);
+      animation: drift 18s linear infinite;
+    }
+    @keyframes drift{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(-4%,3%,0)}}
+
+    .wrap{max-width:1100px; margin:0 auto; padding:26px 16px 60px}
+    header{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(12px);
+      background: rgba(0,0,0,.35);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .nav{
+      max-width:1100px; margin:0 auto; padding:14px 16px;
+      display:flex; align-items:center; gap:14px; justify-content:space-between;
+    }
+    .brand{display:flex; align-items:center; gap:12px; letter-spacing:.12em; text-transform:uppercase; font-weight:800; flex-wrap:wrap;}
+    .brand .logo{width:12px; height:12px; border-radius:50%; background: var(--violet); box-shadow: var(--glow);}
+    .brand span{font-size:18px}
+    .links{display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end}
+    .links a{
+      color:var(--muted); text-decoration:none; font-weight:800;
+      padding:8px 10px; border-radius:12px;
+    }
+    .links a:hover{color:var(--text); background:rgba(255,255,255,.05)}
+    .iconBtn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,10,16,.45);
+      color:var(--text);
+      border-radius:14px;
+      padding:10px 12px;
+      cursor:pointer;
+      display:flex; align-items:center; gap:10px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.35);
+      text-decoration:none;
+      font-weight:900;
+    }
+    .iconBtn:hover{border-color:rgba(177,76,255,.45); box-shadow: var(--glow)}
+    .badge{
+      min-width:22px; height:22px; display:grid; place-items:center;
+      padding:0 7px; font-size:12px; font-weight:900;
+      border-radius:999px;
+      background: rgba(177,76,255,.22);
+      border:1px solid rgba(177,76,255,.35);
+      box-shadow: 0 0 20px rgba(177,76,255,.20);
+    }
+
+    .panel{
+      margin-top:18px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(10,10,16,.55);
+      border-radius: 22px;
+      overflow:hidden;
+      box-shadow: 0 20px 90px rgba(0,0,0,.6);
+      position:relative;
+    }
+    .panel:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(900px 420px at 15% 20%, rgba(177,76,255,.18), transparent 55%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .panelInner{
+      position:relative;
+      padding:18px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:start;
+    }
+    @media (max-width: 920px){
+      .panelInner{grid-template-columns:1fr}
+    }
+
+    .heroImg{
+      width:100%;
+      height:420px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(177,76,255,.25), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.45));
+      box-shadow: 0 0 0 1px rgba(177,76,255,.16), 0 18px 60px rgba(0,0,0,.45);
+      position:relative;
+    }
+    .heroImg img{width:100%; height:100%; object-fit:cover; display:block}
+    .tag{
+      position:absolute;
+      left:14px; bottom:14px;
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:950;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      background: rgba(0,0,0,.48);
+      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 18px rgba(177,76,255,.20);
+    }
+
+    .title{
+      margin:0;
+      font-size: clamp(26px, 3vw, 36px);
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      font-weight:950;
+    }
+    .muted{color:var(--muted); line-height:1.55}
+    .priceBox{
+      margin-top:12px;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+    }
+    .priceBox .big{
+      font-size:22px;
+      font-weight:950;
+      letter-spacing:.03em;
+    }
+    .priceBox .sub{
+      margin-top:4px;
+      font-size:13px;
+      font-weight:900;
+      color: rgba(255,255,255,.65);
+    }
+
+    .btnRow{margin-top:12px; display:flex; gap:10px; flex-wrap:wrap}
+    .btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,10,16,.55);
+      color:var(--text);
+      padding:12px 16px;
+      border-radius: 16px;
+      cursor:pointer;
+      text-decoration:none;
+      font-weight:950;
+      display:inline-flex; align-items:center; gap:10px;
+    }
+    .btn.primary{
+      border-color: rgba(177,76,255,.55);
+      background: linear-gradient(180deg, rgba(177,76,255,.22), rgba(10,10,16,.55));
+      box-shadow: var(--glow);
+    }
+    .btn:hover{transform: translateY(-1px)}
+    .btn.disabled{opacity:.55; cursor:not-allowed; transform:none}
+
+    .desc{
+      margin-top:12px;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      white-space:pre-line;
+      line-height:1.6;
+      color: rgba(255,255,255,.80);
+    }
+
+    .tinyNote{
+      margin-top:12px;
+      padding:12px;
+      border-radius:16px;
+      border:1px dashed rgba(177,76,255,.25);
+      background: rgba(177,76,255,.06);
+      color: rgba(255,255,255,.74);
+      font-size:12.5px;
+      line-height:1.45;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+  <div class="stars"></div>
+
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo"></div>
+        <span>Roky Shop</span>
+      </div>
+      <div class="links">
+        <a href="index.html">Shop</a>
+        <a href="terms.html">Terms</a>
+        <a class="iconBtn" href="cart.html">🛒 Cart <span class="badge" id="cartCount">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="panel">
+      <div class="panelInner">
+        <div class="heroImg">
+          <img id="pImg" src="" alt="Product image">
+          <div class="tag" id="pTag">TAG</div>
+        </div>
+
+        <div>
+          <h1 class="title" id="pTitle">Product</h1>
+          <p class="muted" id="pShort">Short description</p>
+
+          <div class="priceBox">
+            <div class="big" id="pPriceEur">€0.00</div>
+            <div class="sub" id="pPriceRobux">or 0 R$</div>
+          </div>
+
+          <div class="btnRow">
+            <button class="btn primary" id="addBtn" type="button">➕ Add to cart</button>
+            <a class="btn" href="cart.html">🧾 Go to cart</a>
+            <a class="btn" href="index.html">← Back</a>
+          </div>
+
+          <div class="desc" id="pDesc">Full description here</div>
+
+          <div class="tinyNote">
+            <b>Rule:</b> each product can only be purchased <b>once</b>. The cart enforces it automatically.
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const SHOP_NAME = "Roky Shop";
+    const LS_KEY = "rokyshop_cart_v3";
+    const ROBUX_SYMBOL = "R$";
+
+    const PRODUCTS = [
+      {
+        id:"p1",
+        title:"Gold Admin Abuse",
+        short:"Main system (fast setup).",
+        descLong:
+          "Gold Admin Abuse is the premium system designed to enhance your experience.\n\n" +
+          "What you get:\n" +
+          "• Full access\n• Quick delivery\n• VIP support\n\n" +
+          "Requirements:\n• You must follow our Terms of Service.",
+        priceEUR: 2.00,
+        priceRobux: 250,
+        tag:"NEON",
+        img:"images/gold.png"
+      },
+      {
+        id:"p2",
+        title:"Silver Admin Abuse",
+        short:"Balanced pack (best value).",
+        descLong:
+          "Silver Admin Abuse is a balanced option for most buyers.\n\n" +
+          "Includes:\n• Core features\n• Support\n• Fast delivery\n\n" +
+          "Notes:\n• Each product can only be purchased once.",
+        priceEUR: 9.99,
+        priceRobux: 999,
+        tag:"PACK",
+        img:"images/silver.png"
+      },
+      {
+        id:"p3",
+        title:"Bronze Admin Abuse",
+        short:"Limited offer (quick buyers).",
+        descLong:
+          "Bronze Admin Abuse is a limited offer.\n\n" +
+          "Includes:\n• Essential access\n• Delivery guidance\n\n" +
+          "Reminder:\n• 1 per customer (cart enforces it).",
+        priceEUR: 14.99,
+        priceRobux: 1499,
+        tag:"LTD",
+        img:"images/bronze.png"
+      }
+    ];
+
+    function eur(n){
+      return new Intl.NumberFormat("en-US", { style:"currency", currency:"EUR" }).format(n);
+    }
+    function robux(n){ return `${n} ${ROBUX_SYMBOL}`; }
+
+    function loadCart(){
+      try{
+        const raw = localStorage.getItem(LS_KEY);
+        const cart = raw ? JSON.parse(raw) : {};
+        return (cart && typeof cart === "object") ? cart : {};
+      }catch(e){ return {}; }
+    }
+    function saveCart(cart){ localStorage.setItem(LS_KEY, JSON.stringify(cart)); }
+    function cartCount(cart){ return Object.values(cart).reduce((a,b)=>a + (b||0), 0); }
+
+    function getId(){
+      const u = new URL(window.location.href);
+      return u.searchParams.get("id") || "";
+    }
+
+    const cartCountEl = document.getElementById("cartCount");
+    let cart = loadCart();
+    cartCountEl.textContent = String(cartCount(cart));
+
+    const id = getId();
+    const p = PRODUCTS.find(x=>x.id===id);
+
+    if (!p){
+      document.title = "Not found — Roky Shop";
+      document.getElementById("pTitle").textContent = "Product not found";
+      document.getElementById("pShort").textContent = "This product does not exist.";
+      document.getElementById("pDesc").textContent = "Go back to the shop.";
+      document.getElementById("addBtn").classList.add("disabled");
+      document.getElementById("addBtn").disabled = true;
+    }else{
+      document.title = `${p.title} — Roky Shop`;
+      document.getElementById("pImg").src = p.img;
+      document.getElementById("pImg").alt = p.title;
+      document.getElementById("pTag").textContent = p.tag;
+      document.getElementById("pTitle").textContent = p.title;
+      document.getElementById("pShort").textContent = p.short;
+      document.getElementById("pPriceEur").textContent = eur(p.priceEUR || 0);
+      document.getElementById("pPriceRobux").textContent = `or ${robux(p.priceRobux || 0)}`;
+      document.getElementById("pDesc").textContent = p.descLong;
+
+      const addBtn = document.getElementById("addBtn");
+      const inCart = !!cart[p.id];
+      if (inCart){
+        addBtn.textContent = "✅ Already in cart";
+        addBtn.classList.add("disabled");
+        addBtn.disabled = true;
+      }
+
+      addBtn.addEventListener("click", ()=>{
+        // each product only once
+        const next = { ...cart };
+        next[p.id] = 1;
+        cart = next;
+        saveCart(cart);
+        cartCountEl.textContent = String(cartCount(cart));
+        addBtn.textContent = "✅ Added to cart";
+        addBtn.classList.add("disabled");
+        addBtn.disabled = true;
+      });
+    }
+  </script>
+</body>
+</html>
